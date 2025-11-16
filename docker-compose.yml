@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   hl7gateway:
     build:
@@ -7,18 +5,21 @@ services:
       dockerfile: Dockerfile
     container_name: hl7gateway
     ports:
+      - "5000:5000"
       - "2575:2575"
     environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:5000
+      - Hl7Gateway__Port=5000
       - Mllp__Port=2575
-      - Microservices__DirectoryMS__BaseUrl=${DIRECTORYMS_URL:-http://directoryms:5001}
+      - Microservices__DirectoryMS__BaseUrl=${DIRECTORYMS_URL:-http://directoryms_api:8080/api}
       - Microservices__DirectoryMS__AuthToken=${AUTH_TOKEN:-}
-      - Microservices__SchedulingMS__BaseUrl=${SCHEDULINGMS_URL:-http://schedulingms:5002}
+      - Microservices__SchedulingMS__BaseUrl=${SCHEDULINGMS_URL:-http://schedulingms_api:8080/api}
       - Microservices__SchedulingMS__AuthToken=${AUTH_TOKEN:-}
     networks:
-      - cuidarmed-network
+      - cuidarmed_new_net
     restart: unless-stopped
 
 networks:
-  cuidarmed-network:
+  cuidarmed_new_net:
     external: true
 
