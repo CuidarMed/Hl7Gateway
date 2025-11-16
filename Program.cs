@@ -96,10 +96,17 @@ namespace Hl7Gateway
             
             app.MapControllers();
 
-            // Configurar puerto explícitamente
+            // Configurar puerto explícitamente solo si ASPNETCORE_URLS no está configurado
             var port = configuration.GetValue<int>("Hl7Gateway:Port", 5000);
-            app.Urls.Clear();
-            app.Urls.Add($"http://localhost:{port}");
+            var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+            if (string.IsNullOrEmpty(urls))
+            {
+                var host = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true" 
+                    ? "0.0.0.0" 
+                    : "localhost";
+                app.Urls.Clear();
+                app.Urls.Add($"http://{host}:{port}");
+            }
 
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
 

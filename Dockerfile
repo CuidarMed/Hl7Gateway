@@ -8,11 +8,11 @@ RUN dotnet restore
 COPY . .
 RUN dotnet build -c Release -o /app/build
 
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/build .
 
-EXPOSE 2575
+EXPOSE 5000 2575
 
 ENTRYPOINT ["dotnet", "Hl7Gateway.dll"]
 
