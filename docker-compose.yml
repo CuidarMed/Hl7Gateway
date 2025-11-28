@@ -15,6 +15,8 @@ services:
       - Microservices__DirectoryMS__AuthToken=${AUTH_TOKEN:-}
       - Microservices__SchedulingMS__BaseUrl=${SCHEDULINGMS_URL:-http://schedulingms_api:8080/api}
       - Microservices__SchedulingMS__AuthToken=${AUTH_TOKEN:-}
+    volumes:
+      - ./logs:/app/logs  # Montar carpeta logs para persistencia
     networks:
       - cuidarmed_new_net
     restart: unless-stopped
